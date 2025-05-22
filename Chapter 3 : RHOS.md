@@ -102,3 +102,47 @@ Use the RHOS GUI to deploy the container image created in Chapter 2.
 * Logs should confirm the message: `Serving on port 8080...`
 
 This concludes the RHOS GUI introduction. Proceed to CLI usage in the next chapter for a deeper understanding of cluster operations.
+
+
+
+## Appendix A: Running a Jupyter Notebook Container Alongside a Python Server
+
+In some use cases, it may be useful to run multiple containers inside the same pod. For example, you may want to run a Jupyter Notebook server next to a Python HTTP server for data analysis or demonstration purposes.
+
+To accomplish this in OpenShift, you must manually modify the Deployment YAML.
+
+### Steps to Add a Jupyter Container:
+
+1. Navigate to your deployment in the **Topology** view.
+2. Click the application node and open the **Resources** tab.
+3. Click the **Deployment** resource.
+4. Select **Actions > Edit YAML**.
+5. Modify the `containers` list to include an additional container:
+
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: python-http
+        image: quay.io/yourusername/python-http:latest
+        ports:
+        - containerPort: 8080
+      - name: jupyter-notebook
+        image: jupyter/base-notebook:latest
+        ports:
+        - containerPort: 8888
+```
+
+6. Save the YAML to redeploy the updated pod.
+
+### Considerations:
+
+* Both containers share the same network namespace and can communicate via `localhost`.
+* To access the Jupyter Notebook interface externally, expose port 8888 using a service and route.
+* Ensure adequate resources (CPU/memory) are allocated to support both containers.
+
+This appendix is intended for users who wish to experiment with multi-container pods for advanced scenarios.
+
+
+
