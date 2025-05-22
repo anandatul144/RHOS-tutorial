@@ -27,6 +27,49 @@
 2. You should see your application represented as a circle.
 3. Click on the circle to open detailed information, including pod status, resource usage, and logs.
 
+### Understanding Deployments
+
+In OpenShift, a Deployment is a Kubernetes resource used to manage the lifecycle of application pods. It ensures the desired number of pod replicas are always running and handles updates in a controlled manner.
+
+When you create an application using the RHOS Developer Console, OpenShift automatically creates a Deployment object for it. This Deployment manages pod creation, replacement, and scaling.
+
+To view the Deployment:
+
+1. From the **Topology** view, click on your application circle.
+2. Navigate to the **Resources** tab and click on the Deployment link.
+
+### Modifying the Container Image Using YAML
+
+You can modify the container image or other settings directly in the YAML definition of the Deployment.
+
+Steps:
+
+1. Click on the application in the **Topology** view.
+2. In the **Resources** tab, click the **Deployment** link.
+3. Click **Actions > Edit YAML**.
+4. Locate the following section:
+
+```yaml
+spec:
+  template:
+    spec:
+      containers:
+      - name: python-http
+        image: quay.io/yourusername/python-http:latest
+```
+
+5. Change the image tag (for example, to update the version):
+
+```yaml
+image: quay.io/yourusername/python-http:v2
+```
+
+6. Click **Save**.
+
+OpenShift will automatically pull the new image and redeploy the updated pod.
+
+You can also modify environment variables, ports, and volume mounts in this section.
+
 ### Monitoring Logs and Pods
 
 1. Click on the **circle** representing your application in the Topology view.
